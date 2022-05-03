@@ -1,0 +1,57 @@
+
+struct NO* remover_no(struct NO* root,long int key)
+{
+    struct NO* curr = root;
+    struct NO* prev = NULL;
+
+    while (curr != NULL && curr->info != key) {
+        prev = curr;
+        if (key < curr->info)
+            curr = curr->esq;
+        else
+            curr = curr->dir;
+    }
+
+    if (curr == NULL) {
+        return root;
+    }
+
+    if (curr->esq == NULL || curr->dir == NULL) {
+
+        struct NO* newCurr;
+
+        if (curr->esq == NULL)
+            newCurr = curr->dir;
+        else
+            newCurr = curr->esq;
+
+        if (prev == NULL)
+            return newCurr;
+
+        if (curr == prev->esq)
+            prev->esq = newCurr;
+        else
+            prev->dir = newCurr;
+
+        free(curr);
+    }
+    else {
+        struct NO* p = NULL;
+        struct NO* temp;
+
+        temp = curr->dir;
+        while (temp->esq != NULL) {
+            p = temp;
+            temp = temp->esq;
+        }
+
+        if (p != NULL)
+            p->dir = temp->esq;
+
+        else
+            curr->dir = temp->esq;
+        curr->info = temp->info;
+        free(temp);
+    }
+    return root;
+}
